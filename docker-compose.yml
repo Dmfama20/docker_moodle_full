@@ -1,12 +1,12 @@
 version: "2"
 
 services:
-   docker_full_moodle-app:
+   moodle_docker-app:
      build:
       context: PHP/
       dockerfile: PHP.Dockerfile
      restart: always
-     container_name: docker_full_moodle-app
+     container_name: moodle_docker-app
      volumes:
        - ./moodle:/var/www/html
        - ./moodledata:/var/www/moodledata
@@ -14,17 +14,17 @@ services:
        - ./moosh:/var/www/moosh
      networks:
        - traefik-global-proxy
-       - docker_full_moodlefault
+       - moodle_docker_default
      depends_on:
-       - docker_full_moodle-db
-   docker_full_moodle-web:
+       - moodle_docker-db
+   moodle_docker-web:
      image: nginx
      restart: always
-     container_name: docker_full_moodle-web
+     container_name: moodle_docker-web
      volumes:
        - ./conf/nginx.conf:/etc/nginx/nginx.conf:ro
      volumes_from:
-       - docker_full_moodle-app
+       - moodle_docker-app
     #  ports:
     #  - "8088:8088"
      labels:
@@ -33,11 +33,11 @@ services:
         - "traefik.http.routers.moodlefull.entrypoints=web" # if you named your 443 entrypoint differently than webscure, substitute it here!
      networks:
        - traefik-global-proxy
-       - docker_full_moodlefault
-   docker_full_moodle-db:
+       - moodle_docker_default
+   moodle_docker-db:
      image: wodby/mariadb:10.6
      restart: always
-     container_name: docker_full_moodle-db
+     container_name: moodle_docker-db
      secrets:
            - db_user
            - db_password
@@ -53,24 +53,24 @@ services:
      expose:
            - "3306"
      networks:
-           - docker_full_moodlefault
-   docker_full_moodle-cron:
-      container_name: docker_full_moodle-cron
+           - moodle_docker_default
+   moodle_docker-cron:
+      container_name: moodle_docker-cron
       build:
         context: Cron/
         dockerfile: Cron.Dockerfile
       volumes_from:
-        - docker_full_moodle-app 
+        - moodle_docker-app 
       restart: always
       volumes:
         - ./log/cron:/var/log/cron
       networks:
         - traefik-global-proxy
-        - docker_full_moodlefault
+        - moodle_docker_default
       depends_on:
-        - docker_full_moodle-db
-   docker_full_moodle-pma:
-      container_name: docker_full_moodle-pma
+        - moodle_docker-db
+   moodle_docker-pma:
+      container_name: moodle_docker-pma
       image: phpmyadmin/phpmyadmin
       restart: always
       # ports:
@@ -80,12 +80,12 @@ services:
         - "traefik.http.routers.pmafull.rule=Host(`pma.moodle.localhost`)" # domain to expose on
         - "traefik.http.routers.pmafull.entrypoints=web" # if you named your 443 entrypoint differently than webscure, substitute it here!
       environment:
-         PMA_HOST: docker_full_moodle-db
+         PMA_HOST: moodle_docker-db
       networks:
           - traefik-global-proxy
-          - docker_full_moodlefault
+          - moodle_docker_default
       depends_on:
-         - docker_full_moodle-db
+         - moodle_docker-db
 
 secrets:
   db_user:
@@ -97,6 +97,6 @@ secrets:
 networks:
   traefik-global-proxy:
       external: true
-  docker_full_moodlefault:
+  moodle_docker_default:
       external: false
 
