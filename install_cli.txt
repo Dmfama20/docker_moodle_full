@@ -1,3 +1,0 @@
- docker exec -it docker_full_moodle-app sudo -u www-data php admin/cli/install.php --lang=en --wwwroot=http://moodlefull.localhost --dataroot=/var/www/moodledata 
---dbhost=docker_full_moodle-db  --dbtype=mariadb --dbname=moodle --dbuser=moodleuser --dbpass=secretpassword --prefix=mdl_ --fullname=Test --shortname=Test --adminpass=test 
---adminemail=admin@moodle.invalid --agree-license --non-interactive --allow-unstable
