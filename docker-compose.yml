@@ -11,7 +11,6 @@ services:
        - ./moodle:/var/www/html
        - ./moodledata:/var/www/moodledata
        - ./conf/local.ini:/usr/local/etc/php/php.ini
-       - ./moosh:/var/www/moosh
      networks:
        - traefik-global-proxy
        - moodle_docker_default

@@ -14,11 +14,6 @@ RUN mkdir moodle
 RUN chown -R www-data moodle
 
 
-# Install moosh
-WORKDIR ../moosh
-RUN ln -f -s $PWD/moosh.php /usr/local/bin/moosh
-RUN apt-get install sudo
-RUN chown -R www-data /var/www
-WORKDIR ../html
+
 
 
